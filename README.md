@@ -70,3 +70,7 @@ const componentStyles = css`
   }
 `;
 ```
+
+## CSS syntax highlighting
+
+The sole purpose of the `css` tagged template literal is to provide the same syntax highlighting as can be used with Emotion and Syled Components: https://marketplace.visualstudio.com/items?itemName=jpoissonnier.vscode-styled-components
