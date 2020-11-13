@@ -13,8 +13,8 @@ export function useStyle(rules: string) {
     []
   );
 
-  // We don't do this in a useEffect as we want it to insert the style
-  // immediately not wait for the first render.
+  // We don't do this in a useEffect as we want to insert the
+  // style immediately not wait for the first render.
   if (!style.current) {
     style.current = document.createElement('style');
     style.current.innerHTML = rules;
