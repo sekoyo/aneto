@@ -27,7 +27,7 @@ const defaultTheme = {
 
 export function App({ theme = defaultTheme }) {
   useTheme('xx', theme);
-  useStyle(componentStyles);
+  useStyle('app', componentStyles);
 
   return (
     <div className="xx-app">
@@ -51,7 +51,7 @@ import * as React from 'react';
 import { useStyle, css } from 'aneto';
 
 export function Button({ size = 'normal', children, ...attrs }) {
-  useStyle(componentStyles);
+  useStyle('button', componentStyles);
 
   return (
     <button className={`xx-button xx-button--${size}`} {...attrs}>
