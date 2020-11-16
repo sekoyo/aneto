@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
+
 const styles = new Map<string, HTMLStyleElement>();
 
 export function addStyle(name: string, rules: string) {
-  if (styles.get(name)) {
+  if (styles.get(name) || typeof document === 'undefined') {
     return;
   }
   const style = document.createElement('style');
@@ -12,16 +14,17 @@ export function addStyle(name: string, rules: string) {
 }
 
 export function useStyle(name: string, rules: string) {
+  // Add immediately rather than wait for first render in a useEffect.
   addStyle(name, rules);
-}
 
-if ((module as any).hot) {
-  (module as any).hot.dispose(() => {
-    styles.forEach(style => {
-      if (document.head.contains(style)) {
+  useEffect(
+    () => () => {
+      const style = styles.get(name);
+      if (style && document.head.contains(style)) {
         document.head.removeChild(style);
+        styles.delete(name);
       }
-    });
-    styles.clear();
-  });
+    },
+    [name]
+  );
 }

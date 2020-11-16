@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
 
-function makeCssTheme<T = Record<string, string>>(prefix: string, theme: T) {
+const themes = new Map<string, boolean>();
+
+type AnyTheme = Record<string, string>;
+
+function makeCssTheme<T = AnyTheme>(prefix: string, theme: T) {
   return Object.keys(theme).reduce((acc, key) => {
     const value = theme[key as keyof T];
     if (value) {
@@ -10,32 +14,39 @@ function makeCssTheme<T = Record<string, string>>(prefix: string, theme: T) {
   }, '');
 }
 
-export function useTheme<T = Record<string, string>>(
-  prefix: string,
-  theme: T,
-  selector = ':root'
-) {
-  useEffect(() => {
-    let style: HTMLStyleElement;
+export function addTheme<T = AnyTheme>(prefix: string, theme: T, selector = ':root') {
+  if (themes.get(prefix) || typeof document === 'undefined') {
+    return;
+  }
 
-    if (theme) {
-      style = document.createElement('style');
-      const cssTheme = makeCssTheme(prefix, theme);
+  let style: HTMLStyleElement;
 
-      style.setAttribute('id', `${prefix}-theme`);
-      style.innerHTML = `
-        ${selector} {
-          ${cssTheme}
-        }
-      `;
+  style = document.createElement('style');
+  const cssTheme = makeCssTheme(prefix, theme);
 
-      document.head.appendChild(style);
-    }
-
-    return () => {
-      if (style && document.head.contains(style)) {
-        document.head.removeChild(style);
+  style.setAttribute('id', `${prefix}-theme`);
+  style.innerHTML = `
+      ${selector} {
+        ${cssTheme}
       }
-    };
-  }, [theme]);
+    `;
+
+  document.head.appendChild(style);
+  themes.set(prefix, true);
+}
+
+export function useTheme<T = AnyTheme>(prefix: string, theme: T, selector = ':root') {
+  // Add immediately rather than wait for first render in a useEffect.
+  addTheme(prefix, theme, selector);
+
+  useEffect(
+    () => () => {
+      const styleEl = document.head.querySelector(`#${prefix}-theme`);
+      if (styleEl) {
+        document.head.removeChild(styleEl);
+        themes.delete(prefix);
+      }
+    },
+    [prefix, theme, selector]
+  );
 }
