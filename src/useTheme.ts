@@ -47,6 +47,6 @@ export function useTheme<T = AnyTheme>(prefix: string, theme: T, selector = ':ro
         themes.delete(prefix + selector);
       }
     },
-    [prefix, theme, selector]
+    [prefix, selector]
   );
 }
