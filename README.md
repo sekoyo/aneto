@@ -55,18 +55,18 @@ export function Button({ size = 'normal', children, ...attrs }) {
   useStyle('button', componentStyles);
 
   return (
-    <button className={`xx-button xx-button--${size}`} {...attrs}>
+    <button className={`button button--${size}`} {...attrs}>
       {children}
     </button>
   );
 }
 
 const componentStyles = css`
-  .xx-button {
+  .button {
     background: var(--xx-buttonBg);
     padding: var(--xx-buttonPadding);
   }
-  .xx-button--small {
+  .button--small {
     padding: var(--xx-buttonPaddingSmall);
   }
 `;
