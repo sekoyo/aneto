@@ -20,6 +20,7 @@ import * as React from 'react';
 import { useTheme, useStyle, css } from 'aneto';
 
 const defaultTheme = {
+  appFont: 'sans-serif',
   buttonBg: 'red',
   buttonPadding: '10px',
   buttonPaddingSmall: '5px',
@@ -30,16 +31,16 @@ export function App({ theme = defaultTheme }) {
   useStyle('app', componentStyles);
 
   return (
-    <div className="xx-app">
+    <div className="app">
       <Button size="small">Some button</Button>
     </div>
   );
 }
 
 const componentStyles = css`
-  .xx-app {
+  .app {
     height: 100%;
-    font-family: sans-serif;
+    font-family: var(--xx-appFont);
   }
 `;
 ```
