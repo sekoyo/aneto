@@ -15,7 +15,7 @@ function makeCssTheme<T = AnyTheme>(prefix: string, theme: T) {
 }
 
 export function addTheme<T = AnyTheme>(prefix: string, theme: T, selector = ':root') {
-  if (themes.get(prefix) || typeof document === 'undefined') {
+  if (themes.get(prefix + selector) || typeof document === 'undefined') {
     return;
   }
 
@@ -32,7 +32,7 @@ export function addTheme<T = AnyTheme>(prefix: string, theme: T, selector = ':ro
     `;
 
   document.head.appendChild(style);
-  themes.set(prefix, true);
+  themes.set(prefix + selector, true);
 }
 
 export function useTheme<T = AnyTheme>(prefix: string, theme: T, selector = ':root') {
@@ -44,7 +44,7 @@ export function useTheme<T = AnyTheme>(prefix: string, theme: T, selector = ':ro
       const styleEl = document.head.querySelector(`#${prefix}-theme`);
       if (styleEl) {
         document.head.removeChild(styleEl);
-        themes.delete(prefix);
+        themes.delete(prefix + selector);
       }
     },
     [prefix, theme, selector]
