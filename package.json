@@ -1,6 +1,6 @@
 {
   "name": "aneto",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A simple, zero cost CSS-in-JS solution for React.",
   "type": "module",
   "main": "dist/index.js",

@@ -25,6 +25,7 @@ export function addTheme<T = AnyTheme>(prefix: string, theme: T, selector = ':ro
   const cssTheme = makeCssTheme(prefix, theme);
 
   style.setAttribute('id', `${prefix}-theme`);
+  style.setAttribute('data-selector', selector);
   style.innerHTML = `
       ${selector} {
         ${cssTheme}
@@ -41,7 +42,9 @@ export function useTheme<T = AnyTheme>(prefix: string, theme: T, selector = ':ro
 
   useEffect(
     () => () => {
-      const styleEl = document.head.querySelector(`#${prefix}-theme`);
+      const styleEl = document.head.querySelector(
+        `#${prefix}-theme[data-selector="${selector}"]`
+      );
       if (styleEl) {
         document.head.removeChild(styleEl);
         themes.delete(prefix + selector);
