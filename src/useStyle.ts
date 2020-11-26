@@ -1,7 +1,7 @@
 const styles = new Map<string, HTMLStyleElement>();
 
 export function addStyle(uid: string, rules: string) {
-  if (styles.get(uid)) {
+  if (typeof document === 'undefined' || styles.get(uid)) {
     return;
   }
 
