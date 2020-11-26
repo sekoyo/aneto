@@ -1,28 +1,24 @@
+import { useLayoutEffect } from 'react';
+
 const styles = new Map<string, HTMLStyleElement>();
 
-export function addStyle(name: string, rules: string) {
-  if (styles.get(name) || typeof document === 'undefined') {
-    return;
-  }
-  const style = document.createElement('style');
-  style.innerHTML = rules;
-  style.setAttribute('id', name);
-  document.head.appendChild(style);
-  styles.set(name, style);
-}
+export function useStyle(uid: string, rules: string) {
+  useLayoutEffect(() => {
+    if (styles.get(uid)) {
+      return;
+    }
 
-export function useStyle(name: string, rules: string) {
-  // Add immediately rather than wait for first render in a useEffect.
-  addStyle(name, rules);
-}
+    const style = document.createElement('style');
+    style.innerHTML = rules;
+    style.setAttribute('id', uid);
+    document.head.appendChild(style);
+    styles.set(uid, style);
 
-if ((module as any).hot) {
-  (module as any).hot.dispose(() => {
-    styles.forEach(style => {
-      if (document.head.contains(style)) {
+    return () => {
+      if (style && document.head.contains(style)) {
         document.head.removeChild(style);
+        styles.delete(uid);
       }
-    });
-    styles.clear();
-  });
+    };
+  }, [uid, rules]);
 }
